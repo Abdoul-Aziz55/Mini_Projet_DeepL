@@ -5,6 +5,8 @@ import torch.nn as nn
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
+from time import time
+
 
 
 #lecture du fichier et conversion en objet datetime les dates qui étaient en format string
@@ -18,7 +20,6 @@ df = df[df['date'] < pd.to_datetime("2021-1-1")] #recuperation d'une partie des 
 df = df.iloc[:, :2].set_index('date') #on supprime les features qui nous interessent pas
 
 test_size = int((df.shape[0]*20)/100) # 20% des données utilisées pour tester le modele
-
 train_data = df[:-test_size]
 test_data = df[-test_size:]
 
@@ -41,7 +42,7 @@ def fenetre_glissante(data, longueur_sequence):
 
     return np.array(xs), np.array(ys)
 
-longueur_sequence = 1 # on utilise 10 jours pour predire le 11eme
+longueur_sequence = 10 # on utilise 10 jours pour predire le 11eme
 
 x_train, y_train = fenetre_glissante(train_data, longueur_sequence)
 x_test, y_test = fenetre_glissante(test_data, longueur_sequence)
@@ -140,8 +141,54 @@ def train(mod, nepochs, learning_rate):
         print(f'Epoch {epoch} train_loss: {totloss} test_loss: {testloss}')
     print(f'Fin Epoch {epoch} train_loss: {totloss} test_loss: {testloss}', file=sys.stderr)
     return mod.eval(), trainLossVector, testLossVector
+def train_CNN(mod, nepochs, learning_rate):
+    optim = torch.optim.Adam(mod.parameters(), lr=learning_rate)
+    testLossVector = np.zeros(nepochs)
+    trainLossVector = np.zeros(nepochs)
+    for epoch in range(nepochs):
+        testloss = test(mod)
+        totloss, nbatch = 0., 0
+        for data in trainloader:
+            inputs, goldy = data
+            optim.zero_grad()
+            haty = mod(inputs)
+            loss = criterion(haty, goldy)
+            totloss += loss.item()
+            nbatch += 1
+            loss.backward()
+            optim.step()
+        totloss /= float(nbatch)
+        testLossVector[epoch] = testloss
+        trainLossVector[epoch] = totloss
+        print(f'Epoch {epoch} train_loss: {totloss} test_loss: {testloss}')
+    print(f'Fin Epoch {epoch} train_loss: {totloss} test_loss: {testloss}', file=sys.stderr)
+    return mod.eval(), trainLossVector, testLossVector
 
+def using_CNN():
+    layer= (torch.nn.Conv1d(10,1,1), torch.nn.ReLU())
+    mod = torch.nn.Sequential(*layer)
+    start = time()
+    mod, train_hist, test_hist = train_CNN(mod, n_epochs, learningRate)
+    print('training time', time()-start)  
+    plt.plot(train_hist, label='train loss')
+    plt.plot(test_hist, label='test loss')
+    plt.legend(loc="upper right")
+    plt.title('using_cnn')
+    plt.show()
 
+def using_LSTM():
+    
+    model = PredicteurStockQuotidien(input_dim, hidden_dim, longueur_sequence, n_layers)
+    start = time()
+
+    model, train_hist, test_hist = train(model, n_epochs, learningRate)
+    print('training time', time()-start)
+
+    plt.plot(train_hist, label='train loss')
+    plt.plot(test_hist, label='test loss')
+    plt.legend(loc="upper right")
+    plt.title('using_LSTM')
+    plt.show()
 
 input_dim = 1
 hidden_dim = 10
@@ -149,12 +196,7 @@ n_layers = 2
 n_epochs = 20
 learningRate = 0.001
 
-model = PredicteurStockQuotidien(input_dim, hidden_dim, longueur_sequence, n_layers)
-model, train_hist, test_hist = train(model, n_epochs, learningRate)
-
-plt.plot(train_hist, label='train loss')
-plt.plot(test_hist, label='test loss')
-plt.legend()
-plt.show()
-
-
+print('using CNN')
+using_CNN()
+print('using LSTM')
+using_LSTM()
