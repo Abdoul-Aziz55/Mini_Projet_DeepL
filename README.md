@@ -1,6 +1,6 @@
 # Mini_Projet_DeepL
 
-Dans le cadre du cours "XXX" , il nous a été demandé de travailler par binome sur un mini-projet qui a comme objectif d'entrainer un modèle sur une dataset connue et puis d'analyser les résultats.
+Dans le cadre du cours "Machine learning & differentiable programming" , il nous a été demandé de travailler par binome sur un mini-projet qui a comme objectif d'entrainer un modèle sur une dataset connue et puis d'analyser les résultats.
 
 Pour ceci, voici les étapes qu'on réalisé tout au long de ce mini-projet:
 
@@ -100,3 +100,10 @@ Bien évidement, avec un nombre aussi grand le temps d'entrainement était plus 
 
 Ce mini-projet nous a vraiment à aider à appliquer les notions du cours que nous avons vu. Aujourdh'ui on est plus à l'aise voire capable de passer par les différentes étapes pour analyser et prendre le recul sur les modèles du deep learning qu'on choisi. C'est une occasion également pour revoir plusieurs notions et comprendre les différentes courbes, paramètres et hyperparamètre utilisés dans ce cadre.
 Sans oublier que grace a ce cours, on a pu améliorer notre manière d'écrire et déposer les codes sur github.
+
+# Bibliographie :
+
+Pour la réalisation de ce travail, on s'est appuyé sur les ressources suivantes :
+
+https://members.loria.fr/CCerisara/#courses/machine_learning/
+https://machinelearningmastery.com/learning-curves-for-diagnosing-machine-learning-model-performance/
