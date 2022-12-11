@@ -42,7 +42,7 @@ def fenetre_glissante(data, longueur_sequence):
 
     return np.array(xs), np.array(ys)
 
-longueur_sequence = 30# on utilise 10 jours pour predire le 11eme
+longueur_sequence = 30# nombre de jour utilisés pour prédire le suivant
 
 x_train, y_train = fenetre_glissante(train_data, longueur_sequence)
 x_test, y_test = fenetre_glissante(test_data, longueur_sequence)
@@ -141,50 +141,23 @@ def train(mod, nepochs, learning_rate):
         print(f'Epoch {epoch} train_loss: {totloss} test_loss: {testloss}')
     print(f'Fin Epoch {epoch} train_loss: {totloss} test_loss: {testloss}', file=sys.stderr)
     return mod.eval(), trainLossVector, testLossVector
-def train_CNN(mod, nepochs, learning_rate):
-    optim = torch.optim.Adam(mod.parameters(), lr=learning_rate)
-    testLossVector = np.zeros(nepochs)
-    trainLossVector = np.zeros(nepochs)
-    for epoch in range(nepochs):
-        testloss = test(mod)
-        totloss, nbatch = 0., 0
-        for data in trainloader:
-            inputs, goldy = data
-            optim.zero_grad()
-            haty = mod(inputs)
-            loss = criterion(haty, goldy)
-            totloss += loss.item()
-            nbatch += 1
-            loss.backward()
-            optim.step()
-        totloss /= float(nbatch)
-        testLossVector[epoch] = testloss
-        trainLossVector[epoch] = totloss
-        print(f'Epoch {epoch} train_loss: {totloss} test_loss: {testloss}')
-    print(f'Fin Epoch {epoch} train_loss: {totloss} test_loss: {testloss}', file=sys.stderr)
-    return mod.eval(), trainLossVector, testLossVector
 
-
-def using_LSTM():
-    
-    model = PredicteurStockQuotidien(input_dim, hidden_dim, longueur_sequence, n_layers)
-    start = time()
-
-    model, train_hist, test_hist = train(model, n_epochs, learningRate)
-    print('training time', time()-start)
-
-    plt.plot(train_hist, label='train loss')
-    plt.plot(test_hist, label='test loss')
-    plt.legend(loc="upper right")
-    plt.title('using_LSTM')
-    plt.show()
-
+# parametres
 input_dim = 1
 hidden_dim = 10
 n_layers = 2
-n_epochs = 100 
+n_epochs = 100
 learningRate = 0.001
 
+# experience
+model = PredicteurStockQuotidien(input_dim, hidden_dim, longueur_sequence, n_layers)
+start = time()
 
-print('using LSTM')
-using_LSTM()
+model, train_hist, test_hist = train(model, n_epochs, learningRate)
+print('training time', time()-start)
+
+plt.plot(train_hist, label='train loss')
+plt.plot(test_hist, label='test loss')
+plt.legend(loc="upper right")
+plt.title('LSTM')
+plt.show()
