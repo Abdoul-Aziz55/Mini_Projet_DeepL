@@ -15,7 +15,7 @@ df = pd.read_csv("Data/stock-quotidien-stockages-gaz.csv", delimiter=";", parse_
 df = df.sort_values(by='date') #tri en fonction de la date
 df = df[df["pits"] == "Centre"] # recuperation d'un seul "pits" qu'on va suivre.
 
-df = df[df['date'] > pd.to_datetime("2019-12-31")] #recuperation d'une partie des données
+df = df[df['date'] > pd.to_datetime("2017-12-31")] #recuperation d'une partie des données
 df = df[df['date'] < pd.to_datetime("2021-1-1")] #recuperation d'une partie des données
 df = df.iloc[:, :2].set_index('date') #on supprime les features qui nous interessent pas
 
@@ -42,7 +42,7 @@ def fenetre_glissante(data, longueur_sequence):
 
     return np.array(xs), np.array(ys)
 
-longueur_sequence = 10 # on utilise 10 jours pour predire le 11eme
+longueur_sequence = 30# on utilise 10 jours pour predire le 11eme
 
 x_train, y_train = fenetre_glissante(train_data, longueur_sequence)
 x_test, y_test = fenetre_glissante(test_data, longueur_sequence)
@@ -164,17 +164,6 @@ def train_CNN(mod, nepochs, learning_rate):
     print(f'Fin Epoch {epoch} train_loss: {totloss} test_loss: {testloss}', file=sys.stderr)
     return mod.eval(), trainLossVector, testLossVector
 
-def using_CNN():
-    layer= (torch.nn.Conv1d(10,1,1), torch.nn.ReLU())
-    mod = torch.nn.Sequential(*layer)
-    start = time()
-    mod, train_hist, test_hist = train_CNN(mod, n_epochs, learningRate)
-    print('training time', time()-start)  
-    plt.plot(train_hist, label='train loss')
-    plt.plot(test_hist, label='test loss')
-    plt.legend(loc="upper right")
-    plt.title('using_cnn')
-    plt.show()
 
 def using_LSTM():
     
@@ -193,10 +182,9 @@ def using_LSTM():
 input_dim = 1
 hidden_dim = 10
 n_layers = 2
-n_epochs = 20
+n_epochs = 100 
 learningRate = 0.001
 
-print('using CNN')
-using_CNN()
+
 print('using LSTM')
 using_LSTM()
