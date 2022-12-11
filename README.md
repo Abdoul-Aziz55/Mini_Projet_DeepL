@@ -20,10 +20,9 @@ On s'est intéressé plus particulièrement aux données dont le type de puits e
 
 On a commencé par trier notre dataset par order des dates, puis on a filtré les données de tel sorte que la première expérience se fait sur des données entre "2019-12-31" et 2021-1-1 (1 année), et pour la deuxième expérience, c'est entre "2017-12-31" et 2021-1-1 (3 années).
 
-- Pour la première expérience (1 an) : On a décidé de réaliser deux expériences encore:
+- Pour la première expérience (1 an) :
 
 1. predire le 11ème jour
-2. prédire le 31ème jour
 
 - Pour la deuxième expérience (3 ans) : predire le 11ème jour
 
