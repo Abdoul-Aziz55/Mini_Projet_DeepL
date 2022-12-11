@@ -5,6 +5,8 @@ import torch.nn as nn
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
+from time import time
+
 
 
 #lecture du fichier et conversion en objet datetime les dates qui étaient en format string
@@ -13,12 +15,11 @@ df = pd.read_csv("Data/stock-quotidien-stockages-gaz.csv", delimiter=";", parse_
 df = df.sort_values(by='date') #tri en fonction de la date
 df = df[df["pits"] == "Centre"] # recuperation d'un seul "pits" qu'on va suivre.
 
-df = df[df['date'] > pd.to_datetime("2019-12-31")] #recuperation d'une partie des données
+df = df[df['date'] > pd.to_datetime("2017-12-31")] #recuperation d'une partie des données
 df = df[df['date'] < pd.to_datetime("2021-1-1")] #recuperation d'une partie des données
 df = df.iloc[:, :2].set_index('date') #on supprime les features qui nous interessent pas
 
 test_size = int((df.shape[0]*20)/100) # 20% des données utilisées pour tester le modele
-
 train_data = df[:-test_size]
 test_data = df[-test_size:]
 
@@ -41,7 +42,7 @@ def fenetre_glissante(data, longueur_sequence):
 
     return np.array(xs), np.array(ys)
 
-longueur_sequence = 1 # on utilise 10 jours pour predire le 11eme
+longueur_sequence = 30# nombre de jour utilisés pour prédire le suivant
 
 x_train, y_train = fenetre_glissante(train_data, longueur_sequence)
 x_test, y_test = fenetre_glissante(test_data, longueur_sequence)
@@ -141,20 +142,22 @@ def train(mod, nepochs, learning_rate):
     print(f'Fin Epoch {epoch} train_loss: {totloss} test_loss: {testloss}', file=sys.stderr)
     return mod.eval(), trainLossVector, testLossVector
 
-
-
+# parametres
 input_dim = 1
 hidden_dim = 10
 n_layers = 2
-n_epochs = 20
+n_epochs = 100
 learningRate = 0.001
 
+# experience
 model = PredicteurStockQuotidien(input_dim, hidden_dim, longueur_sequence, n_layers)
+start = time()
+
 model, train_hist, test_hist = train(model, n_epochs, learningRate)
+print('training time', time()-start)
 
 plt.plot(train_hist, label='train loss')
 plt.plot(test_hist, label='test loss')
-plt.legend()
+plt.legend(loc="upper right")
+plt.title('LSTM')
 plt.show()
-
-
