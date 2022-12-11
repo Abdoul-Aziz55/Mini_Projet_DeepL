@@ -95,7 +95,7 @@ avec un nombre d'epochs de 50, voir image2). On remarque également qu'entre les
 En ce qui concerne notre modèle, on peut dire qu'il n'est pas trop stable contre ce qu'on appelle "data noise" parce que comme 
 on le voit dans les résulats, la courbe de **test loss** ne decroit pas d'une facon souple.
 
-![image](Image_1_experience1.png)
+![image](Image_1_experience_1.png)
 
 ![image](Image_2_experience_1.png)
 
