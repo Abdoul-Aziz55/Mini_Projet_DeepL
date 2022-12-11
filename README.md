@@ -49,14 +49,19 @@ Dans notre code, le modèle a été conçu avec 2 couches cachées.
 
 # 3. Implementation du code :
 
-Pour l'implementation du code, vous pouvez voir le fichier "main.py". On peut résumer cette implémentation par trois points :
+Pour l'implementation du code, vous pouvez voir le fichier "main.py". On peut résumer cette implémentation par les points suivants :
 
-1.Importation de la dataset
-2.Preprocessing de la dataset
-3.Division de la dataset en dataset train et dataset test (80/20)
-4.Définition de la fonction denetre_glissante() : Celle-ci va donner la main à l'utilisateur de choisir le nombre de séquence qu'il souhaite; ca pourrait etre 1 jours ou 10 jours ... Du coup, ceci va nous permettre de distinguer entre les deux expériences mentionnées auparavant.
-4.Création de la classe PredicteurStockQuotidien(nn.Module) qui contient notre modèle LSTM
-5.Définition des fonctions train() et test()
+    1. Importation de la dataset
+
+    2. Preprocessing de la dataset
+
+    3. Division de la dataset en dataset train et dataset test (80/20)
+
+    4. Définition de la fonction denetre_glissante() : Celle-ci va donner la main à l'utilisateur de choisir le nombre de séquence qu'il souhaite; ca pourrait etre 1 jours ou 10 jours ... Du coup, ceci va nous permettre de distinguer entre les deux expériences mentionnées auparavant.
+
+
+    5. Création de la classe PredicteurStockQuotidien(nn.Module) qui contient notre modèle LSTM
+    6. Définition des fonctions train() et test()
 
 # 4. Analyse des résultats :
 
